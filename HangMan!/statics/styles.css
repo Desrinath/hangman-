@@ -1,0 +1,42 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#hangman-container {
+    margin-top: 50px;
+}
+
+#word-display {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+#guesses-left {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+#letters {
+    margin-bottom: 20px;
+}
+
+.letter-btn {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 1.2em;
+}
+
+#reset-btn {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#reset-btn:hover {
+    background-color: #45a049;
+}

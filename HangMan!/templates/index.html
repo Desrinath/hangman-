@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div id="hangman-container">
+        <h1>Hangman Game</h1>
+        <div id="word-display">
+            {% for char in display_word %}
+                {{ char }}
+            {% endfor %}
+        </div>
+        <div id="guesses-left">Guesses Left: <span id="guesses">{{ guesses_left }}</span></div>
+        <div id="letters">
+            {% for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+                <button class="letter-btn" onclick="guess('{{ letter }}')" {% if letter in guessed_letters %}disabled{% endif %}>{{ letter }}</button>
+            {% endfor %}
+        </div>
+        <button id="reset-btn" onclick="window.location.reload()">New Game</button>
+    </div>
+    <script>
+        function guess(letter) {
+            fetch('/guess', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    letter: letter,
+                    chosen_word: '{{ chosen_word }}',
+                    guesses_left: '{{ guesses_left }}',
+                    guessed_letters: '{{ guessed_letters }}',
+                    display_word: '{{ display_word | join("") }}'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('guesses').innerText = data.guesses_left;
+                document.getElementById('word-display').innerHTML = data.display_word.join('');
+                if (data.game_over) {
+                    alert(data.guesses_left == 0 ? 'You lose! The word was: ' + '{{ chosen_word }}' : 'Congratulations! You won!');
+                    window.location.reload();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
